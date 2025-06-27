@@ -1,64 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login to Saad's Heart</title>
+  <meta charset="UTF-8">
+  <title>Login to My Heart</title>
   <style>
     body {
-      background: linear-gradient(to right, #ffafbd, #ffc3a0);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #ffe1e8, #ffb6c1);
+      font-family: 'Segoe UI', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
     }
-    .card {
+
+    .login-container {
       background: white;
-      padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
       text-align: center;
       max-width: 350px;
     }
+
     h2 {
-      color: #e91e63;
-      margin-bottom: 1rem;
+      color: #d63384;
+      margin-bottom: 20px;
+      font-size: 24px;
     }
+
     input {
       width: 100%;
-      padding: 0.75rem;
-      margin: 0.5rem 0;
-      border: 1px solid #ddd;
-      border-radius: 0.5rem;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 10px;
     }
+
     button {
-      background-color: #e91e63;
+      background-color: #d63384;
       color: white;
+      padding: 12px 20px;
       border: none;
-      padding: 0.75rem 1.5rem;
-      margin-top: 1rem;
-      border-radius: 0.5rem;
+      border-radius: 10px;
+      font-weight: bold;
       cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s;
     }
+
     button:hover {
-      background-color: #d81b60;
+      background-color: #c2185b;
+    }
+
+    .message {
+      margin-top: 15px;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h2>Login to Saad's Heart ❤️</h2>
-    <form id="heartForm">
-      <input type="text" id="name" name="name" placeholder="Your Name 💌" required />
-      <input type="password" id="password" name="password" placeholder="Secret Word 🔐" required />
-      <button type="submit">Enter</button>
+  <div class="login-container">
+    <h2>💖 Login to My Heart 💖</h2>
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Your Name" required />
+      <input type="password" id="password" placeholder="Your Secret Code" required />
+      <button type="submit">Enter My Heart</button>
+      <div class="message" id="message"></div>
     </form>
   </div>
 
   <script>
-    document.getElementById("heartForm").addEventListener("submit", async function(e) {
+    const form = document.getElementById('loginForm');
+    const message = document.getElementById('message');
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const name = document.getElementById("name").value;
-      const password = document.getElementById("password")
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await fetch('https://saadmld2004.app.n8n.cloud/webhook/login-heart-finale', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + btoa('wissal:nbghik')
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password
+          })
+        });
+
+        if (response.ok) {
+          message.textContent = "💌 Your heart message has been delivered!";
+          message.style.color = "green";
+        } else {
+          message.textContent = "💔 Failed to deliver your message.";
+          message.style.color = "red";
+        }
+      } catch (error) {
+        message.textContent = "⚠️ Connection error!";
+        message.style.color = "red";
+      }
+    });
+  </script>
+</body>
+</html>
